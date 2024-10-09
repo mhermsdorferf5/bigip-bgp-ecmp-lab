@@ -1,0 +1,194 @@
+controls:
+  logLevel: info
+  logFilename: /var/log/cloud/bigIpRuntimeInit.log
+pre_onboard_enabled: 
+  - name: provision_rest
+    type: inline
+    commands:
+      - /usr/bin/setdb provision.extramb 1000 || exit 0
+      - /usr/bin/setdb provision.restjavad.extramb 1384 || /usr/bin/setdb restjavad.useextramb
+        true || exit 0
+      - /usr/bin/setdb iapplxrpm.timeout 300 || exit 0
+      - /usr/bin/setdb icrd.timeout 180 || exit 0
+      - /usr/bin/setdb restjavad.timeout 180 || exit 0
+      - /usr/bin/setdb restnoded.timeout 180 || exit 0
+      - tmsh modify auth password-policy policy-enforcement disabled || exit 0
+runtime_parameters:
+  - name: ADMIN_PASS
+    type: static
+    value: admin
+  - name: HOST_NAME
+    type: static
+    value: bigip-c.lab.example.net
+  - name: REG_KEY
+    type: static
+    value: A2403-17734-11063-63563-5229280
+  - name: VLAN_NAME
+    type: static
+    value: subnet30
+  - name: SELF_IP
+    type: static
+    value: '10.1.30.7'
+  - name: DEFAULT_ROUTE
+    type: static
+    value: '10.1.30.1'
+  - name: CLUSTER_OWNER_IP
+    type: static
+    value: '10.1.10.5'
+  - name: LOCAL_AS 
+    type: static
+    value: '65543'
+  - name: ROUTER_ID
+    type: static
+    value: '10.255.255.30'
+  - name: NEIGHBOR_IP
+    type: static
+    value: '10.1.30.8'
+  - name: REMOTE_AS
+    type: static
+    value: '65540'
+bigip_ready_enabled: []
+extension_packages:
+  install_operations:
+    - extensionType: do
+      extensionVersion: 1.46.0
+    - extensionType: as3
+      extensionVersion: 3.53.0
+    - extensionType: ts
+      extensionVersion: 1.36.0
+    - extensionType: fast
+      extensionVersion: 1.25.0
+extension_services:
+  service_operations:
+    - extensionType: do
+      type: inline
+      value:
+        schemaVersion: 1.0.0
+        class: Device
+        async: true
+        label: BIG-IP A with BGP
+        Common:
+          class: Tenant
+          My_DbVariables:
+            class: DbVariables
+            provision.extramb: 1000
+            provision.restjavad.extramb: 1384
+            restjavad.timeout: 180
+            restnoded.timeout: 180
+            icrd.timeout: 180
+            iapplxrpm.timeout: 300
+            config.allow.rfc3927: enable
+          My_System:
+            class: System
+            hostname: '{{{ HOST_NAME }}}'
+            cliInactivityTimeout: 86400
+            consoleInactivityTimeout: 86400
+            autoPhonehome: true
+          My_PasswordPolicy:
+            class: PasswordPolicy
+            policyEnforcementEnabled: false
+            minLength: 6
+          My_License:
+            class: License
+            licenseType: regKey
+            regKey: '{{{ REG_KEY }}}'
+          My_Dns:
+            class: DNS
+            nameServers:
+              - 8.8.8.8
+              - 8.8.4.4
+              - 1.1.1.1
+          My_Ntp:
+            class: NTP
+            servers:
+              - 0.us.pool.ntp.org
+              - 1.us.pool.ntp.org
+              - 2.us.pool.ntp.org
+              - 3.us.pool.ntp.org
+            timezone: UTC
+          My_Provisioning:
+            class: Provision
+            ltm: nominal
+            gtm: nominal
+            asm: nominal
+            avr: nominal
+          '{{{ VLAN_NAME }}}':
+            class: VLAN
+            tag: 4090
+            mtu: 1500
+            interfaces:
+              - name: 1.1
+                tagged: false
+          '{{{ VLAN_NAME }}}-self':
+            class: SelfIp
+            address: '{{{ SELF_IP }}}/24'
+            vlan: '{{{ VLAN_NAME }}}'
+            allowService: default
+            trafficGroup: traffic-group-local-only
+          default:
+            class: Route
+            network: default
+            gw: '{{{ DEFAULT_ROUTE }}}'
+          configsyncIp:
+            class: ConfigSync
+            configsyncIp: '{{{ SELF_IP }}}'
+          failoverAddress:
+            class: FailoverUnicast
+            address: '{{{ SELF_IP }}}'
+          mirrorIp:
+            class: MirrorIp
+            primaryIp: '{{{ SELF_IP }}}'
+          sync-failover:
+            class: DeviceGroup
+            type: sync-failover
+            members:
+            - bigip-a.lab.example.net
+            - bigip-b.lab.example.net
+            - bigip-c.lab.example.net
+            owner: "/Common/sync-failover/members/0"
+            autoSync: true
+            saveOnAutoSync: false
+            networkFailover: true
+            fullLoadOnSync: false
+            asmSync: true
+          trust:
+            class: DeviceTrust
+            localUsername: admin
+            localPassword: '{{{ ADMIN_PASS }}}'
+            remoteHost: '{{{ CLUSTER_OWNER_IP }}}'
+            remoteUsername: admin
+            remotePassword: '{{{ ADMIN_PASS }}}'
+          rd0:
+            class: RouteDomain
+            id: 0
+            vlans:
+            - '{{{ VLAN_NAME }}}'
+          bgp_rd0:
+            class: RoutingBGP
+            localAS: '{{{ LOCAL_AS }}}'
+            routerId: '{{{ ROUTER_ID }}}'
+            addressFamilies:
+            - internetProtocol: ipv4
+              redistributionList:
+              - routingProtocol: kernel
+              - routingProtocol: static
+            gracefulRestart:
+              gracefulResetEnabled: true
+              restartTime: 120
+              stalePathTime: 60
+            holdTime: 35
+            keepAlive: 10
+            neighbors:
+            - address: '{{{ NEIGHBOR_IP }}}'
+              addressFamilies:
+              - internetProtocol: ipv4
+                asOverrideEnabled: true
+              ebgpMultihop: 2
+              peerGroup: Neighbor
+            peerGroups:
+            - name: Neighbor
+              addressFamilies:
+              - internetProtocol: ipv4
+                softReconfigurationInboundEnabled: true
+              remoteAS: '{{{ REMOTE_AS }}}'
+post_onboard_enabled: []

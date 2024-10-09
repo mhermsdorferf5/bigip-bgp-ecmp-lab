@@ -16,6 +16,13 @@ Provide a quick example of how to use your code.  This should provide the user w
 
 Outline the requirements and steps to install this project.
 
+```bash
+curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
+bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
+curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-a_runtime-init.yaml
+f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml
+```
+
 ## Usage
 
 Outline how the user can use your project and the various features the project offers.
