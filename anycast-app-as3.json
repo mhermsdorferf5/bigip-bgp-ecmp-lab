@@ -1,0 +1,66 @@
+{
+    "class": "ADC",
+    "schemaVersion": "3.7.0",
+    "Common": {
+        "class": "Tenant",
+        "Shared": {
+            "class": "Application",
+            "template": "shared",
+            "anycast-vip-80": {
+                "class": "Service_HTTP",
+                "virtualPort": 80,
+                "virtualAddresses": [
+                    {
+                        "use": "anycast-10.100.101.100"
+                    }
+                ],
+                "pool": "nginx_test_pool"
+            },
+            "nginx_test_pool": {
+                "class": "Pool",
+                "monitors": [
+                    "http"
+                ],
+                "members": [
+                    {
+                        "servicePort": 8080,
+                        "serverAddresses": [
+                            "10.1.40.9"
+                        ],
+                        "shareNodes": true
+                    },
+                    {
+                        "servicePort": 8081,
+                        "serverAddresses": [
+                            "10.1.40.9"
+                        ],
+                        "shareNodes": true
+                    },
+                    {
+                        "servicePort": 8082,
+                        "serverAddresses": [
+                            "10.1.40.9"
+                        ],
+                        "shareNodes": true
+                    },
+                    {
+                        "servicePort": 8083,
+                        "serverAddresses": [
+                            "10.1.40.9"
+                        ],
+                        "shareNodes": true
+                    }
+                ]
+            },
+            "anycast-10.100.101.100": {
+                "class": "Service_Address",
+                "virtualAddress": "10.100.101.100",
+                "arpEnabled": false,
+                "icmpEcho": "enable",
+                "routeAdvertisement": "any",
+                "spanningEnabled": false,
+                "trafficGroup": "none"
+            }
+        }
+    }
+}
