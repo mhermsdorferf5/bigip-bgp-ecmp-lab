@@ -1,8 +1,9 @@
 # Traffic Generator
 
-# Network Config:
+## Network Config
 
 ubuntu@ubuntu:~$ cat /etc/netplan/90-static.yaml
+
 ```yaml
 network:
     version: 2
@@ -19,14 +20,16 @@ network:
 sudo netplan apply
 ```
 
-# Install Docker:
+## Install Docker
+
 ```bash
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install -y docker.io
 ```
 
-# Docker Containers
+## Docker Containers
+
 ```bash
 docker run -d --restart unless-stopped quay.io/curl/curl:latest /bin/sh -c 'while true; do curl -s http://10.100.101.100/txt; sleep .25; done'
 docker run -d --restart unless-stopped quay.io/curl/curl:latest /bin/sh -c 'while true; do curl -s http://10.100.101.100/txt; sleep 1; done'
@@ -34,6 +37,7 @@ docker run -d --restart unless-stopped quay.io/curl/curl:latest /bin/sh -c 'whil
 ```
 
 Check with:
+
 ```bash
 ubuntu@ubuntu:~$ docker ps
 CONTAINER ID   IMAGE                      COMMAND                  CREATED          STATUS         PORTS     NAMES

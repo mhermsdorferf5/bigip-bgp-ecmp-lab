@@ -1,8 +1,9 @@
 # Linux Server
 
-# Network Config:
+## Network Config
 
 ubuntu@ubuntu:~$ cat /etc/netplan/90-static.yaml
+
 ```yaml
 network:
     version: 2
@@ -19,14 +20,16 @@ network:
 sudo netplan apply
 ```
 
-# Install Docker:
+## Install Docker
+
 ```bash
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install -y docker.io
 ```
 
-# Docker Containers
+## Docker Containers
+
 ```bash
 docker run -d --restart unless-stopped -p 8080:80 f5devcentral/f5-demo-httpd:nginx
 docker run -d --restart unless-stopped -p 8081:80 f5devcentral/f5-demo-httpd:nginx
@@ -35,6 +38,7 @@ docker run -d --restart unless-stopped -p 8083:80 f5devcentral/f5-demo-httpd:ngi
 ```
 
 Check with:
+
 ```bash
 ubuntu@ubuntu:~$ docker ps
 CONTAINER ID   IMAGE                              COMMAND                  CREATED          STATUS          PORTS                                            NAMES
