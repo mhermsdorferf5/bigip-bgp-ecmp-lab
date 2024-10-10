@@ -22,7 +22,7 @@ This has already been completed, but if updates are needed here's how to pull th
 curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
 bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
 curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-a_runtime-init.yaml
-f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml
+f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
 ```
 
 ### BIG-IP B
@@ -31,7 +31,7 @@ f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml
 curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
 bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
 curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-b_runtime-init.yaml
-f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml
+f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
 ```
 
 ### BIG-IP C
@@ -40,7 +40,7 @@ f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml
 curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
 bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
 curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-c_runtime-init.yaml
-f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml
+f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
 ```
 
 ### AS3 App Config
