@@ -47,7 +47,15 @@ runtime_parameters:
   - name: REMOTE_AS
     type: static
     value: '65540'
-bigip_ready_enabled: []
+bigip_ready_enabled:
+  - name: disable_password_policy
+    type: inline
+    commands:
+      - tmsh modify auth password-policy policy-enforcement disabled || exit 0
+  - name: gateway_pool
+    type: inline
+    commands:
+      - tmsh create ltm pool /Common/gateway_pool { monitor gateway_icmp members replace-all-with { 10.1.10.8:0 10.1.20.8:0 10.1.30.8:0 } }  || exit 0
 extension_packages:
   install_operations:
     - extensionType: do
@@ -125,10 +133,11 @@ extension_services:
             vlan: '{{{ VLAN_NAME }}}'
             allowService: default
             trafficGroup: traffic-group-local-only
-          default:
+          defaultRoute:
             class: Route
             network: default
             gw: '{{{ DEFAULT_ROUTE }}}'
+            localOnly: true
           configsyncIp:
             class: ConfigSync
             configsyncIp: '{{{ SELF_IP }}}'
@@ -158,6 +167,36 @@ extension_services:
             remoteHost: '{{{ CLUSTER_OWNER_IP }}}'
             remoteUsername: admin
             remotePassword: '{{{ ADMIN_PASS }}}'
+          traffic-group-1:
+            class: TrafficGroup
+            autoFailbackEnabled: true
+            autoFailbackTime: 120
+            failoverMethod: ha-order
+            haLoadFactor: 1
+            haOrder:
+            - bigip-a.lab.example.net
+            - bigip-b.lab.example.net
+            - bigip-c.lab.example.net
+          traffic-group-2:
+            class: TrafficGroup
+            autoFailbackEnabled: true
+            autoFailbackTime: 120
+            failoverMethod: ha-order
+            haLoadFactor: 1
+            haOrder:
+            - bigip-b.lab.example.net
+            - bigip-a.lab.example.net
+            - bigip-c.lab.example.net
+          traffic-group-3:
+            class: TrafficGroup
+            autoFailbackEnabled: true
+            autoFailbackTime: 120
+            failoverMethod: ha-order
+            haLoadFactor: 1
+            haOrder:
+            - bigip-c.lab.example.net
+            - bigip-a.lab.example.net
+            - bigip-b.lab.example.net
           rd0:
             class: RouteDomain
             id: 0
@@ -191,4 +230,12 @@ extension_services:
               - internetProtocol: ipv4
                 softReconfigurationInboundEnabled: true
               remoteAS: '{{{ REMOTE_AS }}}'
-post_onboard_enabled: []
+post_onboard_enabled:
+  - name: deploy_bzid959521_fix
+    type: inline
+    commands:
+      - curl -s -o /config/startup_script_bzid959521-fix.sh https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/startup_script_bzid959521-fix.sh
+      - chmod 777 /config/startup_script_bzid959521-fix.sh
+      - chmod +w /config/startup
+      - echo "/config/startup_script_bzid959521-fix.sh &" >> /config/startup
+      - chmod -w /config/startup
