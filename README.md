@@ -6,7 +6,7 @@ This documents the build of a UDF lab for Active/Active/Active BIG-IP deployment
 
 ## Getting Started
 
-Provide a quick example of how to use your code.  This should provide the user with a launch point to quickly see what the project can offer them.
+The UDF Blueprint for this lab can be found here: [Active-Active-Active-BGP](https://udf.f5.com/b/798cf00d-c5e9-437b-8b81-6655ea43aaf6#documentation)
 
 ## Installation
 
