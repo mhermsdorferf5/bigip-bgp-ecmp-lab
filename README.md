@@ -1,12 +1,8 @@
-# Solutions Engineering Template Repository
-
-A template repository that contains all required files (LICENSE, SUPPORT, CONTRIBUTING, etc) as outlined in the org standards.  
-
-The sections below are recommended in your project's README.md file.
+# BIG-IP BGP ECMP Lab
 
 ## Overview
 
-Provide a short overview of the project.
+This documents the build of a UDF lab for Active/Active/Active BIG-IP deployment using BGP ECMP.
 
 ## Getting Started
 
@@ -15,40 +11,6 @@ Provide a quick example of how to use your code.  This should provide the user w
 ## Installation
 
 This has already been completed, but if updates are needed here's how to pull the various configs down.
-
-### BIG-IP A
-
-```bash
-curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
-bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
-curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-a_runtime-init.yaml
-f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
-```
-
-### BIG-IP B
-
-```bash
-curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
-bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
-curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-b_runtime-init.yaml
-f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
-```
-
-### BIG-IP C
-
-```bash
-curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
-bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
-curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-c_runtime-init.yaml
-f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
-```
-
-### AS3 App Config
-
-```bash
-curl -s -o /config/as3.json https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/anycast-app-as3.json
-curl -k -u admin:admin -d @/config/as3.json https://127.0.0.1/mgmt/shared/appsvcs/declare
-```
 
 ## Usage
 
@@ -254,6 +216,49 @@ Total number of prefixes 1
 
 Outline any requirements to setup a development environment if someone would like to contribute.  You may also link to another file for this information.
 
+### BIG-IP A
+
+```bash
+curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
+bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
+curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-a_runtime-init.yaml
+f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
+```
+
+### BIG-IP B
+
+```bash
+curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
+bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
+curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-b_runtime-init.yaml
+f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
+```
+
+### BIG-IP C
+
+```bash
+curl -s -o /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
+bash /tmp/f5-bigip-runtime-init-2.0.3-1.gz.run --
+curl -s -o /config/runtime-init-conf.yaml https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/bigip-c_runtime-init.yaml
+f5-bigip-runtime-init --config-file /config/runtime-init-conf.yaml --skip-telemetry
+```
+
+### AS3 App Config
+
+```bash
+curl -s -o /config/as3.json https://raw.githubusercontent.com/mhermsdorferf5/bigip-bgp-ecmp-lab/refs/heads/main/anycast-app-as3.json
+curl -k -u admin:admin -d @/config/as3.json https://127.0.0.1/mgmt/shared/appsvcs/declare
+```
+
+### Vyos Config
+
+Vyos config commands: [vyos.conf]
+
+### Web Server & Graffic Generator Config
+
+Web Server Deployment Instructions: [server.md](server.md)
+Traffic Generator Deployment Instructions: [traffic-gen.md](traffic-gen.md)
+
 ## Support
 
 For support, please open a GitHub issue.  Note, the code in this repository is community supported and is not supported by F5 Networks.  For a complete list of supported projects please reference [SUPPORT.md](SUPPORT.md).
@@ -268,7 +273,7 @@ Please refer to the [F5 DevCentral Community Code of Conduct](code_of_conduct.md
 
 ## Copyright
 
-Copyright 2014-2020 F5 Networks Inc.
+Copyright 2014-2024 F5 Networks Inc.
 
 ### F5 Networks Contributor License Agreement
 
