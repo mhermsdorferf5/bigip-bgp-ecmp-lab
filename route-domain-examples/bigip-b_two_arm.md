@@ -15,8 +15,8 @@ tmsh modify net vlan subnet40 { interfaces replace-all-with { 1.3 { } } }
 tmsh modify net vlan subnet50 { interfaces replace-all-with { 1.4 { } } }
 
 
-tmsh create net route-domain tenant_a { id 101 strict enable routing-protocol replace-all-with { BGP } vlans replace-all-with { subnet10 subnet30 } }
-tmsh create net route-domain tenant_b { id 102 strict enable routing-protocol replace-all-with { BGP } vlans replace-all-with { subnet40 subnet50 } }
+tmsh create net route-domain tenant_a { id 101 strict enabled routing-protocol replace-all-with { BGP } vlans replace-all-with { subnet10 subnet30 } }
+tmsh create net route-domain tenant_b { id 102 strict enabled routing-protocol replace-all-with { BGP } vlans replace-all-with { subnet40 subnet50 } }
 
 tmsh create net self subnet10-self { address 10.1.10.6%101/24 allow-service all traffic-group traffic-group-local-only vlan subnet10 }
 tmsh create net self subnet30-self { address 10.1.30.6%101/24 allow-service all traffic-group traffic-group-local-only vlan subnet30 }
